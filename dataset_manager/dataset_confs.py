@@ -23,10 +23,10 @@ control_flow_var_attribute = {}
 filename = {}
 
 base_dir = os.path.dirname(os.path.abspath(__file__))  # folder where the script is
-logs_dir = os.path.join(base_dir, "..", "data_logs")
+logs_dir = "C:/Users/alegi/Desktop/intoRDDL/src/input"
 
 #### SimBank settings ####
-dataset = "SimBank"
+"""dataset = "SimBank"
 filename[dataset] = os.path.join(logs_dir, "SimBank.csv")
 case_id_col[dataset] = "case_nr"
 activity_col[dataset] = "activity"
@@ -45,7 +45,7 @@ environmental_actions[dataset] = ['receive_acceptance', 'receive_refusal']
 control_flow_var_incremental[dataset] = []
 control_flow_var_binary[dataset]= []
 control_flow_var_attribute[dataset] = ["noc", "nor"]
-control_flow_var[dataset] = environmental_actions[dataset] + control_flow_var_incremental[dataset] + control_flow_var_attribute[dataset] + control_flow_var_binary[dataset]
+control_flow_var[dataset] = environmental_actions[dataset] + control_flow_var_incremental[dataset] + control_flow_var_attribute[dataset] + control_flow_var_binary[dataset]"""
 
 
 #### Traffic fines settings ####
