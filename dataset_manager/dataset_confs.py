@@ -89,7 +89,7 @@ for i in [1,2,4]:
     case_id_col[dataset] = "Case ID"
     activity_col[dataset] = "Activity"
     resource_col[dataset] = "org:group"
-    timestamp_col[dataset] = "time:timestamp"
+    timestamp_col[dataset] = "timestamp"
     label_col[dataset] = "label"
     pos_label[dataset] = "deviant"
     neg_label[dataset] = "regular"
