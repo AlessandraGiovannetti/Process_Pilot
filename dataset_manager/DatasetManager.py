@@ -44,7 +44,10 @@ class DatasetManager:
             dtypes[col] = "float"
 
         data = pd.read_csv(dataset_confs.filename[self.dataset_name], sep=";", dtype=dtypes)
-        data[self.timestamp_col] = pd.to_datetime(data[self.timestamp_col])
+        data[self.timestamp_col] = pd.to_datetime(
+            data[self.timestamp_col],
+            format="mixed"
+        )
         # --- Add start action as first action and archive application as last (for transition matrix) ---
         first_rows = data.groupby(self.case_id_col).head(1).copy()
         first_rows[self.activity_col] = 'start'

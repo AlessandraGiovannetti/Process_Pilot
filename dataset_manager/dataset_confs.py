@@ -191,32 +191,65 @@ for i in range(1, 7):
     
             
 #### BPIC2012 settings ####
-bpic2012_dict = {"bpic2012_cancelled": "bpic2012_O_CANCELLED-COMPLETE.csv",
-                 "bpic2012_accepted": "bpic2012_O_ACCEPTED-COMPLETE.csv",
-                 "bpic2012_declined": "bpic2012_O_DECLINED-COMPLETE.csv"
-                }
+
+bpic2012_dict = {
+    "bpic2012": "bpic2012.csv"
+}
 
 for dataset, fname in bpic2012_dict.items():
 
     filename[dataset] = os.path.join(logs_dir, fname)
 
-    case_id_col[dataset] = "Case ID"
-    activity_col[dataset] = "Activity"
-    resource_col[dataset] = "Resource"
-    timestamp_col[dataset] = "Complete Timestamp"
-    label_col[dataset] = "label"
-    neg_label[dataset] = "regular"
-    pos_label[dataset] = "deviant"
+    case_id_col[dataset] = "case:concept:name"
+    activity_col[dataset] = "concept:name"
+    resource_col[dataset] = "org:resource"
+    timestamp_col[dataset] = "time:timestamp"
 
-    # features for classifier
-    dynamic_cat_cols[dataset] = ["Activity", "Resource"]
+    label_col[dataset] = None
+    neg_label[dataset] = None
+    pos_label[dataset] = None
+
+    # State attributes
+    dynamic_cat_cols[dataset] = [
+        "concept:name",
+        "org:resource"
+    ]
+
     static_cat_cols[dataset] = []
-    dynamic_num_cols[dataset] = ["hour", "weekday", "month", "timesincemidnight", "timesincelastevent", "timesincecasestart", "event_nr", "open_cases"]
-    static_num_cols[dataset] = ['AMOUNT_REQ']
 
-    environmental_actions[dataset] = ['O_CANCELLED-COMPLETE', "O_ACCEPTED-COMPLETE", 'O_SENT_BACK-COMPLETE']
-    control_flow_var_incremental[dataset] = ['O_CREATED-COMPLETE']
-    control_flow_var_binary[dataset]= []
+    dynamic_num_cols[dataset] = [
+        "hour",
+        "weekday",
+        "month",
+        "timesincemidnight",
+        "timesincelastevent",
+        "timesincecasestart",
+        "event_nr",
+        "open_cases"
+    ]
+
+    static_num_cols[dataset] = [
+        "AMOUNT_REQ"
+    ]
+
+    # ---------------------------------------------------------
+    # Control-flow variables
+    # ---------------------------------------------------------
+
+    # Solo attività che vogliamo trasformare in variabili di stato
+    control_flow_var_incremental[dataset] = [
+        "O_CREATED-COMPLETE"
+    ]
+
+    control_flow_var_binary[dataset] = []
+
     control_flow_var_attribute[dataset] = []
-    control_flow_var[dataset] = environmental_actions[dataset] + control_flow_var_incremental[dataset] + control_flow_var_attribute[dataset] + control_flow_var_binary[dataset]
-    
+
+    control_flow_var[dataset] = (
+        control_flow_var_incremental[dataset]
+        + control_flow_var_attribute[dataset]
+        + control_flow_var_binary[dataset]
+    )
+
+    # Nessuna environmental action viene rimossa
+    environmental_actions[dataset] = []    
