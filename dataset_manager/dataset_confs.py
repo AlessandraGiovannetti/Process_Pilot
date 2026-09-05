@@ -79,46 +79,144 @@ for formula in range(1,3):
     
 
 #### Sepsis Cases settings ####
-datasets = ["sepsis_cases_%s" % i for i in range(1, 5)]
 
-for i in [1,2,4]:
-    
-    dataset = f"sepsis_cases_{i}"
-    filename[dataset] = os.path.join(logs_dir, "%s.csv" % dataset)
+datasets = ["sepsis_preprocessed"]
+
+for dataset in datasets:
+
+    filename[dataset] = os.path.join(
+        logs_dir,
+        "sepsis_preprocessed.csv"
+    )
+
+    # ========================================================
+    # BASIC COLUMNS
+    # ========================================================
 
     case_id_col[dataset] = "Case ID"
     activity_col[dataset] = "Activity"
     resource_col[dataset] = "org:group"
     timestamp_col[dataset] = "timestamp"
-    label_col[dataset] = "label"
-    pos_label[dataset] = "deviant"
-    neg_label[dataset] = "regular"
 
-    # features for classifier
-    dynamic_cat_cols[dataset] = ["Activity", 'org:group'] # i.e. event attributes
-    static_cat_cols[dataset] = ['Diagnose', 'DiagnosticArtAstrup', 'DiagnosticBlood', 'DiagnosticECG',
-                       'DiagnosticIC', 'DiagnosticLacticAcid', 'DiagnosticLiquor',
-                       'DiagnosticOther', 'DiagnosticSputum', 'DiagnosticUrinaryCulture',
-                       'DiagnosticUrinarySediment', 'DiagnosticXthorax', 'DisfuncOrg',
-                       'Hypotensie', 'Hypoxie', 'InfectionSuspected', 'Infusion', 'Oligurie',
-                       'SIRSCritHeartRate', 'SIRSCritLeucos', 'SIRSCritTachypnea',
-                       'SIRSCritTemperature', 'SIRSCriteria2OrMore'] # i.e. case attributes that are known from the start
-    dynamic_num_cols[dataset] = ['CRP', 'LacticAcid', 'Leucocytes', "hour", "weekday", "month", "timesincemidnight", "timesincelastevent", "timesincecasestart", "event_nr", "open_cases"]
-    static_num_cols[dataset] = ['Age']
-    if i == 1:
-        environmental_actions[dataset] = ['Return ER']
-        control_flow_var_attribute[dataset] = ['recent_release'] #cannot be abstracted or transformed because defines the outcome of the case
-        control_flow_var_incremental[dataset] = []
-        control_flow_var_binary[dataset]= []   
-      
-    elif i == 2 or i == 4: 
-        environmental_actions[dataset] = [] #return ER won't be in all_actions because we cut traces after Release activity
-        control_flow_var_attribute[dataset] = [] 
-        control_flow_var_incremental[dataset] = []
-        control_flow_var_binary[dataset]= []   
-     
-    control_flow_var[dataset] = environmental_actions[dataset] + control_flow_var_incremental[dataset] + control_flow_var_attribute[dataset] + control_flow_var_binary[dataset]
-    
+    # ========================================================
+    # NO PREDICTIVE LABEL
+    # ========================================================
+
+    # Questo dataset è usato direttamente per la costruzione
+    # del MDP, quindi non abbiamo una label deviant/regular.
+
+    label_col[dataset] = None
+    pos_label[dataset] = None
+    neg_label[dataset] = None
+
+    # ========================================================
+    # CATEGORICAL FEATURES
+    # ========================================================
+
+    # Activity e org:group sono attributi dinamici dell'evento.
+
+    dynamic_cat_cols[dataset] = [
+        "Activity",
+        "org:group"
+    ]
+
+    # Attributi clinici disponibili come attributi dello stato.
+    #
+    # Sono categorici/booleani e devono essere mantenuti come
+    # tali. L'encoding RDDL potrà poi rappresentarli come bool
+    # quando il loro dominio è True/False/missing.
+
+    static_cat_cols[dataset] = [
+        "Diagnose",
+        "DiagnosticArtAstrup",
+        "DiagnosticBlood",
+        "DiagnosticECG",
+        "DiagnosticIC",
+        "DiagnosticLacticAcid",
+        "DiagnosticLiquor",
+        "DiagnosticOther",
+        "DiagnosticSputum",
+        "DiagnosticUrinaryCulture",
+        "DiagnosticUrinarySediment",
+        "DiagnosticXthorax",
+        "DisfuncOrg",
+        "Hypotensie",
+        "Hypoxie",
+        "InfectionSuspected",
+        "Infusion",
+        "Oligurie",
+        "SIRSCritHeartRate",
+        "SIRSCritLeucos",
+        "SIRSCritTachypnea",
+        "SIRSCritTemperature",
+        "SIRSCriteria2OrMore"
+    ]
+
+    # ========================================================
+    # NUMERICAL FEATURES
+    # ========================================================
+
+    dynamic_num_cols[dataset] = [
+        "CRP",
+        "LacticAcid",
+        "Leucocytes",
+        "hour",
+        "weekday",
+        "month",
+        "timesincemidnight",
+        "timesincelastevent",
+        "timesincecasestart",
+        "event_nr",
+        "open_cases",
+        "execution_time_minutes"
+    ]
+
+    static_num_cols[dataset] = [
+        "Age"
+    ]
+
+    # ========================================================
+    # ENVIRONMENTAL ACTIONS
+    # ========================================================
+
+    # NESSUNA attività ambientale.
+    #
+    # Tutte le attività del log devono rimanere azioni del MDP,
+    # comprese:
+    #
+    #   Return ER
+    #   Admission IC
+    #   Release A
+    #   Release B
+    #   Release C
+    #   Release D
+    #   Release E
+    #
+    # In questo modo vengono mantenute nella sequenza delle
+    # azioni e possono essere usate come transizioni del MDP.
+
+    environmental_actions[dataset] = []
+
+    # ========================================================
+    # CONTROL-FLOW VARIABLES
+    # ========================================================
+
+    # Nessuna variabile di control flow derivata da
+    # recent_release o da altri outcome predittivi.
+
+    control_flow_var_attribute[dataset] = []
+
+    control_flow_var_incremental[dataset] = []
+
+    control_flow_var_binary[dataset] = []
+
+    control_flow_var[dataset] = (
+        environmental_actions[dataset]
+        + control_flow_var_incremental[dataset]
+        + control_flow_var_attribute[dataset]
+        + control_flow_var_binary[dataset]
+    )
+
 
 #### BPIC2017 settings ####
 
