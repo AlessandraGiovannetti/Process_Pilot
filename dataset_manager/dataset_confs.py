@@ -51,9 +51,9 @@ control_flow_var[dataset] = environmental_actions[dataset] + control_flow_var_in
 #### Traffic fines settings ####
 
 for formula in range(1,3):
-    dataset = "traffic_fines_%s"%formula
+    dataset = "rtf_preprocessed" 
     
-    filename[dataset] = os.path.join(logs_dir, "traffic_fines_%s.csv"%formula)
+    filename[dataset] = os.path.join(logs_dir, "rtf_preprocessed.csv")
     
     case_id_col[dataset] = "Case ID"
     activity_col[dataset] = "Activity"
@@ -66,10 +66,10 @@ for formula in range(1,3):
     # features for classifier
     dynamic_cat_cols[dataset] = ["Activity", 'Resource', "lastSent", "notificationType", "dismissal"]
     static_cat_cols[dataset] = ["article",  "vehicleClass"]
-    dynamic_num_cols[dataset] = ["expense", "timesincelastevent", "timesincecasestart", "timesincemidnight", "event_nr", "month", "weekday", "hour", "open_cases"]
+    dynamic_num_cols[dataset] = ["expense", "timesincelastevent", "timesincecasestart", "timesincemidnight", "event_nr", "month", "weekday", "hour", "open_cases", "execution_time_minutes"]
     static_num_cols[dataset] = ["amount", "points"]
 
-    environmental_actions[dataset] = ['Payment']
+    environmental_actions[dataset] = []
     control_flow_var_incremental[dataset] = []
     control_flow_var_binary[dataset]= []
     control_flow_var_attribute[dataset] = []
@@ -291,7 +291,7 @@ for i in range(1, 7):
 #### BPIC2012 settings ####
 
 bpic2012_dict = {
-    "bpic2012": "bpic2012.csv"
+    "bpi12_preprocessed": "bpi12_preprocessed.csv"
 }
 
 for dataset, fname in bpic2012_dict.items():
@@ -323,7 +323,8 @@ for dataset, fname in bpic2012_dict.items():
         "timesincelastevent",
         "timesincecasestart",
         "event_nr",
-        "open_cases"
+        "open_cases",
+        "execution_time_minutes"
     ]
 
     static_num_cols[dataset] = [
