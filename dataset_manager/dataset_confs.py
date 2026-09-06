@@ -352,3 +352,237 @@ for dataset, fname in bpic2012_dict.items():
 
     # Nessuna environmental action viene rimossa
     environmental_actions[dataset] = []    
+
+#### BPI 2020 Permit settings ####
+
+datasets = ["permit_preprocessed"]
+
+for dataset in datasets:
+
+    filename[dataset] = os.path.join(
+        logs_dir,
+        "Permit_preprocessed.csv"
+    )
+
+    # ========================================================
+    # BASIC COLUMNS
+    # ========================================================
+
+    case_id_col[dataset] = "Case ID"
+    activity_col[dataset] = "Activity"
+    resource_col[dataset] = "Resource"
+    timestamp_col[dataset] = "timestamp"
+
+    # ========================================================
+    # NO PREDICTIVE LABEL
+    # ========================================================
+
+    # Il dataset viene usato direttamente per la costruzione
+    # del MDP. Non viene definita una label deviant/regular.
+
+    label_col[dataset] = None
+    pos_label[dataset] = None
+    neg_label[dataset] = None
+
+    # ========================================================
+    # CATEGORICAL FEATURES
+    # ========================================================
+
+    # Attributi dinamici dell'evento.
+
+    dynamic_cat_cols[dataset] = [
+        "Activity",
+        "Resource",
+        "Role"
+    ]
+
+    # Attributi relativi al permit/case.
+
+    static_cat_cols[dataset] = [
+        "OrganizationalEntity",
+        "ProjectNumber",
+        "TaskNumber",
+        "ActivityNumber",
+        "travel permit number",
+        "BudgetNumber",
+        "Overspent",
+        "DeclarationNumber_0",
+        "RfpNumber_0",
+        "Cost Type_0",
+        "Task_0",
+        "Project_0"
+    ]
+
+    # ========================================================
+    # NUMERICAL FEATURES
+    # ========================================================
+
+    # Variabili che cambiano/sono osservabili nel corso
+    # dell'esecuzione del processo.
+
+    dynamic_num_cols[dataset] = [
+        "timesincemidnight",
+        "month",
+        "weekday",
+        "hour",
+        "timesincelastevent",
+        "timesincecasestart",
+        "event_nr",
+        "execution_time_minutes"
+    ]
+
+    # Attributi economici associati al permit/case.
+
+    static_num_cols[dataset] = [
+        "TotalDeclared",
+        "RequestedAmount_0",
+        "RequestedBudget",
+        "OverspentAmount"
+    ]
+
+    # ========================================================
+    # ENVIRONMENTAL ACTIONS
+    # ========================================================
+
+    # Per ora nessuna attività viene rimossa dal MDP.
+    #
+    # Tutte le attività del log rimangono azioni/transizioni
+    # disponibili nella sequenza del processo.
+
+    environmental_actions[dataset] = []
+
+    # ========================================================
+    # CONTROL-FLOW VARIABLES
+    # ========================================================
+
+    # Nessuna variabile di control flow aggiuntiva.
+
+    control_flow_var_attribute[dataset] = []
+
+    control_flow_var_incremental[dataset] = []
+
+    control_flow_var_binary[dataset] = []
+
+    control_flow_var[dataset] = (
+        environmental_actions[dataset]
+        + control_flow_var_incremental[dataset]
+        + control_flow_var_attribute[dataset]
+        + control_flow_var_binary[dataset]
+    )
+
+#### BPI 2020 International Declarations settings ####
+
+datasets = ["intDecl"]
+
+for dataset in datasets:
+
+    filename[dataset] = os.path.join(
+        logs_dir,
+        "intDecl_preprocessed.csv"
+    )
+
+    # ========================================================
+    # BASIC COLUMNS
+    # ========================================================
+
+    case_id_col[dataset] = "Case ID"
+    activity_col[dataset] = "Activity"
+    resource_col[dataset] = "Resource"
+    timestamp_col[dataset] = "timestamp"
+
+    # ========================================================
+    # NO PREDICTIVE LABEL
+    # ========================================================
+
+    # Il dataset viene utilizzato direttamente per la
+    # costruzione del MDP.
+    # Non viene utilizzata una label deviant/regular.
+
+    label_col[dataset] = None
+    pos_label[dataset] = None
+    neg_label[dataset] = None
+
+    # ========================================================
+    # CATEGORICAL FEATURES
+    # ========================================================
+
+    # Attributi dinamici dell'evento.
+
+    dynamic_cat_cols[dataset] = [
+        "Activity",
+        "Resource",
+        "Role"
+    ]
+
+    # Attributi statici relativi alla dichiarazione
+    # e al permit associato.
+
+    static_cat_cols[dataset] = [
+        "DeclarationNumber",
+        "Permit travel permit number",
+        "travel permit number",
+        "Permit TaskNumber",
+        "Permit BudgetNumber",
+        "Permit ProjectNumber",
+        "Permit OrganizationalEntity",
+        "Permit ID",
+        "Permit id",
+        "BudgetNumber"
+    ]
+
+    # ========================================================
+    # NUMERICAL FEATURES
+    # ========================================================
+
+    # Variabili temporali/event-level.
+
+    dynamic_num_cols[dataset] = [
+        "timesincemidnight",
+        "month",
+        "weekday",
+        "hour",
+        "timesincelastevent",
+        "timesincecasestart",
+        "event_nr",
+        "execution_time_minutes"
+    ]
+
+    # Attributi economici della dichiarazione/permit.
+
+    static_num_cols[dataset] = [
+        "Amount",
+        "RequestedAmount",
+        "OriginalAmount",
+        "Permit RequestedBudget",
+        "AdjustedAmount"
+    ]
+
+    # ========================================================
+    # ENVIRONMENTAL ACTIONS
+    # ========================================================
+
+    # Per ora nessuna attività viene esclusa.
+    #
+    # Tutte le attività del log vengono mantenute come
+    # azioni/transizioni del MDP.
+
+    environmental_actions[dataset] = []
+
+    # ========================================================
+    # CONTROL-FLOW VARIABLES
+    # ========================================================
+
+    # Nessuna variabile di control flow aggiuntiva.
+
+    control_flow_var_attribute[dataset] = []
+
+    control_flow_var_incremental[dataset] = []
+
+    control_flow_var_binary[dataset] = []
+
+    control_flow_var[dataset] = (
+        environmental_actions[dataset]
+        + control_flow_var_incremental[dataset]
+        + control_flow_var_attribute[dataset]
+        + control_flow_var_binary[dataset]
+    )
