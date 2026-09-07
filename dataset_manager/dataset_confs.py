@@ -472,7 +472,7 @@ for dataset in datasets:
 
 #### BPI 2020 International Declarations settings ####
 
-datasets = ["intDecl"]
+datasets = ["intDecl_preprocessed"]
 
 for dataset in datasets:
 
