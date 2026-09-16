@@ -324,7 +324,8 @@ for dataset, fname in bpic2012_dict.items():
         "timesincecasestart",
         "event_nr",
         "open_cases",
-        "execution_time_minutes"
+        "remaining_time_minutes",
+        "execution_time_minutes",
     ]
 
     static_num_cols[dataset] = [
