@@ -66,7 +66,7 @@ for formula in range(1,3):
     # features for classifier
     dynamic_cat_cols[dataset] = ["Activity", 'Resource', "lastSent", "notificationType", "dismissal"]
     static_cat_cols[dataset] = ["article",  "vehicleClass"]
-    dynamic_num_cols[dataset] = ["expense", "timesincelastevent", "timesincecasestart", "timesincemidnight", "event_nr", "month", "weekday", "hour", "open_cases", "execution_time_minutes"]
+    dynamic_num_cols[dataset] = ["expense", "timesincelastevent", "timesincecasestart", "timesincemidnight", "event_nr", "month", "weekday", "hour", "open_cases", "execution_time_minutes", "remaining_time_minutes"]
     static_num_cols[dataset] = ["amount", "points"]
 
     environmental_actions[dataset] = []
@@ -168,7 +168,8 @@ for dataset in datasets:
         "timesincecasestart",
         "event_nr",
         "open_cases",
-        "execution_time_minutes"
+        "execution_time_minutes",
+        "remaining_time_minutes"
     ]
 
     static_num_cols[dataset] = [
@@ -429,7 +430,8 @@ for dataset in datasets:
         "timesincelastevent",
         "timesincecasestart",
         "event_nr",
-        "execution_time_minutes"
+        "execution_time_minutes",
+        "remaining_time_minutes"
     ]
 
     # Attributi economici associati al permit/case.
@@ -545,7 +547,8 @@ for dataset in datasets:
         "timesincelastevent",
         "timesincecasestart",
         "event_nr",
-        "execution_time_minutes"
+        "execution_time_minutes",
+        "remaining_time_minutes"
     ]
 
     # Attributi economici della dichiarazione/permit.
